@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FUEGO — Студия танца</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --fire-deep:    #7A1212;
+      --fire-mid:     #C0392B;
+      --fire-bright:  #E74C3C;
+      --ember:        #E67E22;
+      --gold:         #D4A017;
+      --gold-light:   #F0C040;
+      --cream:        #FAF3E0;
+      --warm-white:   #FFF8F0;
+      --dark:         #1A0A0A;
+      --dark-mid:     #2C1010;
+      --text-dark:    #2C1A1A;
+      --text-muted:   #7A5C5C;
+      --shadow:       rgba(122,18,18,.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: var(--warm-white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h1,h2,h3 { font-family: 'Cormorant Garamond', serif; }
+    h2 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 600; line-height: 1.1; }
+    h3 { font-size: 1.4rem; font-weight: 600; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6vw;
+      height: 70px;
+      background: rgba(26,10,10,.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(212,160,23,.2);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,.5); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 700; letter-spacing: .05em;
+      color: var(--gold-light); text-decoration: none;
+    }
+    .nav-logo span { color: var(--fire-bright); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,248,240,.75);
+      text-decoration: none; font-size: .82rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      transition: color .25s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .nav-cta {
+      background: var(--fire-mid);
+      color: var(--warm-white) !important;
+      padding: .4rem 1.1rem; border-radius: 40px;
+      transition: background .25s, transform .2s !important;
+    }
+    .nav-cta:hover { background: var(--fire-bright) !important; transform: translateY(-1px); }
+
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .burger span { width: 26px; height: 2px; background: var(--gold-light); border-radius: 2px; transition: .3s; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background: var(--dark);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 100px 6vw 60px;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 60%, rgba(192,57,43,.28) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 80%, rgba(230,126,34,.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 20% 20%, rgba(122,18,18,.2) 0%, transparent 60%);
+    }
+
+    /* animated particles */
+    .sparks { position: absolute; inset: 0; pointer-events: none; }
+    .spark {
+      position: absolute; border-radius: 50%;
+      background: var(--gold);
+      animation: float-spark linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes float-spark {
+      0%   { opacity: 0; transform: translateY(0) scale(1); }
+      10%  { opacity: .7; }
+      80%  { opacity: .4; }
+      100% { opacity: 0; transform: translateY(-120px) scale(.3); }
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 820px; }
+
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: .72rem; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .35rem 1.1rem; border-radius: 40px; margin-bottom: 1.8rem;
+      animation: fade-up .8s ease both;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 10vw, 6.5rem);
+      font-weight: 700; line-height: 1;
+      color: var(--warm-white); margin-bottom: .6rem;
+      animation: fade-up .8s .15s ease both;
+    }
+    .hero-title em {
+      font-style: italic; color: var(--fire-bright);
+      text-shadow: 0 0 40px rgba(231,76,60,.6);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: rgba(255,248,240,.7);
+      font-weight: 300; line-height: 1.6;
+      max-width: 560px; margin: 0 auto 2.5rem;
+      animation: fade-up .8s .3s ease both;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      animation: fade-up .8s .45s ease both; }
+
+    .btn-primary {
+      background: var(--fire-mid);
+      color: var(--warm-white);
+      padding: .9rem 2.2rem; border-radius: 50px;
+      font-family: 'Raleway', sans-serif;
+      font-size: .9rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; text-decoration: none;
+      border: none; cursor: pointer;
+      box-shadow: 0 8px 30px rgba(192,57,43,.45);
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn-primary:hover {
+      background: var(--fire-bright);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(231,76,60,.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--warm-white);
+      padding: .9rem 2.2rem; border-radius: 50px;
+      font-family: 'Raleway', sans-serif;
+      font-size: .9rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; text-decoration: none;
+      border: 1.5px solid rgba(255,248,240,.35); cursor: pointer;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--gold); color: var(--gold);
+      transform: translateY(-3px);
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      color: rgba(255,248,240,.4); font-size: .7rem; letter-spacing: .15em;
+      text-transform: uppercase;
+      animation: fade-up .8s .9s ease both;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,248,240,.4), transparent);
+      animation: scroll-pulse 2s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%,100% { transform: scaleY(1); opacity: .4; }
+      50% { transform: scaleY(.5); opacity: .8; }
+    }
+
+    /* ── SECTION BASICS ── */
+    section { padding: 100px 6vw; }
+
+    .section-label {
+      display: inline-block;
+      font-size: .7rem; font-weight: 700; letter-spacing: .25em;
+      text-transform: uppercase; color: var(--fire-mid);
+      margin-bottom: .8rem;
+    }
+
+    .section-title {
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+    .section-title span { color: var(--fire-mid); font-style: italic; }
+
+    .divider {
+      width: 50px; height: 3px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--fire-mid), var(--gold));
+      margin: 1.2rem 0 2.5rem;
+    }
+
+    /* fade-in on scroll */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--cream);
+      position: relative; overflow: hidden;
+    }
+    #about::before {
+      content: 'FUEGO';
+      position: absolute; right: -1rem; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18vw; font-weight: 700;
+      color: rgba(192,57,43,.05); line-height: 1;
+      pointer-events: none; user-select: none;
+    }
+
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center; position: relative; z-index: 1;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-card {
+      background: var(--dark);
+      border-radius: 20px; padding: 2.5rem;
+      color: var(--warm-white);
+      box-shadow: 0 20px 60px var(--shadow);
+    }
+    .about-card-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem; font-weight: 700;
+      color: var(--fire-bright); line-height: 1;
+      text-shadow: 0 0 30px rgba(231,76,60,.4);
+    }
+    .about-card p { font-size: .88rem; color: rgba(255,248,240,.65); line-height: 1.5; margin-top: .3rem; }
+
+    .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    .about-mini {
+      background: rgba(192,57,43,.12);
+      border: 1px solid rgba(192,57,43,.2);
+      border-radius: 14px; padding: 1.2rem;
+    }
+    .about-mini-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-weight: 700;
+      color: var(--gold); line-height: 1;
+    }
+    .about-mini p { font-size: .78rem; color: rgba(255,248,240,.6); margin-top: .2rem; }
+
+    .about-text p {
+      font-size: 1rem; line-height: 1.85; color: var(--text-dark);
+      margin-bottom: 1.2rem;
+    }
+
+    .teacher-tags { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+    .tag {
+      background: rgba(192,57,43,.1);
+      border: 1px solid rgba(192,57,43,.25);
+      color: var(--fire-deep);
+      padding: .35rem .9rem; border-radius: 30px;
+      font-size: .78rem; font-weight: 600; letter-spacing: .05em;
+    }
+
+    /* ── DIRECTIONS ── */
+    #directions { background: var(--dark-mid); }
+    #directions .section-title { color: var(--warm-white); }
+    #directions .section-label { color: var(--gold); }
+    #directions .divider { margin-left: 0; }
+
+    .directions-header { max-width: 540px; margin-bottom: 4rem; }
+    .directions-header p { color: rgba(255,248,240,.6); line-height: 1.7; margin-top: .8rem; }
+
+    .directions-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .dir-card {
+      background: rgba(255,248,240,.04);
+      border: 1px solid rgba(255,248,240,.08);
+      border-radius: 20px; padding: 2rem;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+      cursor: default;
+    }
+    .dir-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(192,57,43,.5);
+      box-shadow: 0 16px 50px rgba(192,57,43,.2);
+    }
+
+    .dir-icon {
+      font-size: 2.4rem; margin-bottom: 1rem; display: block;
+      filter: drop-shadow(0 0 10px rgba(212,160,23,.3));
+    }
+    .dir-title { font-size: 1.3rem; color: var(--warm-white); margin-bottom: .6rem; }
+    .dir-desc { font-size: .85rem; color: rgba(255,248,240,.55); line-height: 1.7; margin-bottom: 1.2rem; }
+    .dir-levels { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .level {
+      background: rgba(212,160,23,.15);
+      border: 1px solid rgba(212,160,23,.25);
+      color: var(--gold); font-size: .7rem; font-weight: 600;
+      letter-spacing: .08em; padding: .25rem .7rem; border-radius: 20px;
+    }
+
+    /* ── SCHEDULE ── */
+    #schedule {
+      background: var(--cream);
+    }
+
+    .schedule-intro { max-width: 600px; margin-bottom: 3.5rem; }
+    .schedule-intro p { color: var(--text-muted); line-height: 1.7; }
+
+    .schedule-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .sched-card {
+      background: white;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,.07);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .sched-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.12); }
+
+    .sched-header {
+      background: var(--dark);
+      padding: 1.4rem 1.6rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .sched-icon { font-size: 1.8rem; }
+    .sched-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--warm-white); }
+    .sched-subtitle { font-size: .75rem; color: var(--gold); letter-spacing: .08em; margin-top: .1rem; }
+
+    .sched-body { padding: 1.4rem 1.6rem; }
+
+    .sched-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .65rem 0; border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .sched-row:last-child { border-bottom: none; }
+    .sched-day { font-weight: 700; font-size: .82rem; color: var(--fire-deep); letter-spacing: .05em; }
+    .sched-time { font-size: .82rem; color: var(--text-dark); }
+    .sched-badge {
+      font-size: .7rem; font-weight: 700;
+      background: rgba(192,57,43,.1); color: var(--fire-mid);
+      padding: .2rem .6rem; border-radius: 10px;
+    }
+    .sched-body .note {
+      margin-top: 1rem; font-size: .78rem;
+      color: var(--text-muted); font-style: italic;
+    }
+
+    /* ── BAILAMOS ── */
+    #bailamos {
+      background: var(--dark);
+      position: relative; overflow: hidden;
+    }
+    #bailamos::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 50%, rgba(192,57,43,.2) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 10% 80%, rgba(212,160,23,.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .bailamos-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+
+    #bailamos .section-label { color: var(--gold); }
+    #bailamos .section-title { color: var(--warm-white); }
+    #bailamos .section-title span { color: var(--gold); }
+    #bailamos p { color: rgba(255,248,240,.65); line-height: 1.8; margin-bottom: 1rem; }
+
+    .bailamos-features { list-style: none; margin: 1.5rem 0 2rem; display: flex; flex-direction: column; gap: .8rem; }
+    .bailamos-features li {
+      display: flex; align-items: center; gap: .8rem;
+      color: rgba(255,248,240,.8); font-size: .9rem;
+    }
+    .bailamos-features li::before {
+      content: '♦';
+      color: var(--gold); font-size: .6rem; flex-shrink: 0;
+    }
+
+    .bailamos-visual {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    .bailamos-tile {
+      background: rgba(255,248,240,.04);
+      border: 1px solid rgba(255,248,240,.08);
+      border-radius: 16px; padding: 1.6rem;
+      text-align: center;
+      transition: transform .3s, border-color .3s;
+    }
+    .bailamos-tile:hover { transform: translateY(-4px); border-color: rgba(212,160,23,.4); }
+    .bailamos-tile:first-child { grid-column: span 2; }
+    .bailamos-tile-icon { font-size: 2rem; margin-bottom: .6rem; display: block; }
+    .bailamos-tile h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--warm-white); }
+    .bailamos-tile p { font-size: .78rem; color: rgba(255,248,240,.5); margin-top: .3rem; }
+
+    /* ── TESTIMONIALS ── */
+    #reviews { background: var(--warm-white); }
+
+    .reviews-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
+
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .review-card {
+      background: white;
+      border-radius: 20px; padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+      border: 1px solid rgba(0,0,0,.04);
+      transition: transform .3s, box-shadow .3s;
+      position: relative;
+    }
+    .review-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.1); }
+
+    .review-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem; line-height: 1;
+      color: var(--fire-bright); opacity: .25;
+      position: absolute; top: 1rem; right: 1.5rem;
+    }
+
+    .review-stars { color: var(--gold); font-size: .85rem; margin-bottom: 1rem; letter-spacing: .05em; }
+    .review-text { font-size: .9rem; line-height: 1.75; color: var(--text-dark); margin-bottom: 1.4rem; }
+
+    .reviewer { display: flex; align-items: center; gap: .8rem; }
+    .reviewer-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--fire-mid), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 700; color: white;
+      flex-shrink: 0;
+    }
+    .reviewer-name { font-weight: 700; font-size: .88rem; color: var(--text-dark); }
+    .reviewer-role { font-size: .76rem; color: var(--text-muted); }
+
+    /* ── CONTACTS ── */
+    #contacts {
+      background: var(--dark-mid);
+      position: relative; overflow: hidden;
+    }
+    #contacts::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 60% at 0% 50%, rgba(122,18,18,.3) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    #contacts .section-label { color: var(--gold); }
+    #contacts .section-title { color: var(--warm-white); }
+
+    .contacts-grid {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem;
+      position: relative; z-index: 1; align-items: start;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+
+    .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+    .contact-item-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(192,57,43,.2);
+      border: 1px solid rgba(192,57,43,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-item-text h4 { font-size: .82rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: .3rem; }
+    .contact-item-text p, .contact-item-text a {
+      font-size: .9rem; color: rgba(255,248,240,.75);
+      text-decoration: none; transition: color .2s;
+    }
+    .contact-item-text a:hover { color: var(--gold); }
+
+    .messengers { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 2rem; }
+    .messenger-btn {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .6rem 1.1rem; border-radius: 40px;
+      font-size: .78rem; font-weight: 700; text-decoration: none;
+      letter-spacing: .06em; text-transform: uppercase;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .messenger-btn:hover { transform: translateY(-2px); }
+    .msg-whatsapp { background: #25D366; color: white; box-shadow: 0 4px 15px rgba(37,211,102,.3); }
+    .msg-telegram { background: #2CA5E0; color: white; box-shadow: 0 4px 15px rgba(44,165,224,.3); }
+    .msg-instagram { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color: white; box-shadow: 0 4px 15px rgba(220,39,67,.3); }
+
+    .map-wrapper {
+      border-radius: 20px; overflow: hidden;
+      height: 360px;
+      border: 1px solid rgba(255,248,240,.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      background: rgba(255,248,240,.03);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem;
+    }
+    .map-placeholder {
+      text-align: center;
+    }
+    .map-pin { font-size: 3rem; margin-bottom: .5rem; display: block; }
+    .map-placeholder h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--warm-white); }
+    .map-placeholder p { font-size: .82rem; color: rgba(255,248,240,.5); margin-top: .3rem; }
+    .map-link {
+      display: inline-block;
+      margin-top: .8rem;
+      padding: .55rem 1.3rem;
+      border-radius: 30px;
+      background: var(--fire-mid);
+      color: white; text-decoration: none;
+      font-size: .78rem; font-weight: 700; letter-spacing: .08em;
+      transition: background .2s, transform .2s;
+    }
+    .map-link:hover { background: var(--fire-bright); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      padding: 2rem 6vw;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--gold-light); }
+    .footer-logo span { color: var(--fire-bright); }
+    footer p { font-size: .78rem; color: rgba(255,248,240,.3); }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; z-index: 99;
+      background: rgba(26,10,10,.97);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; font-weight: 600; color: var(--warm-white);
+      text-decoration: none; transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu .close-btn {
+      position: absolute; top: 1.5rem; right: 2rem;
+      background: none; border: none; cursor: pointer;
+      color: var(--warm-white); font-size: 1.8rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-grid, .bailamos-inner, .contacts-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .nav-links { display: none; }
+      .burger { display: flex; }
+      .about-cards { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 70px 5vw; }
+      .about-cards { grid-template-columns: 1fr 1fr; }
+      .bailamos-visual { grid-template-columns: 1fr; }
+      .bailamos-tile:first-child { grid-column: auto; }
+      .reviews-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">FUE<span>G</span>O</a>
+  <ul class="nav-links">
+    <li><a href="#about">О студии</a></li>
+    <li><a href="#directions">Направления</a></li>
+    <li><a href="#schedule">Расписание</a></li>
+    <li><a href="#bailamos">Bailamos</a></li>
+    <li><a href="#reviews">Отзывы</a></li>
+    <li><a href="#contacts" class="nav-cta">Записаться</a></li>
+  </ul>
+  <div class="burger" id="burgerBtn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-btn" onclick="toggleMenu()">✕</button>
+  <a href="#about" onclick="toggleMenu()">О студии</a>
+  <a href="#directions" onclick="toggleMenu()">Направления</a>
+  <a href="#schedule" onclick="toggleMenu()">Расписание</a>
+  <a href="#bailamos" onclick="toggleMenu()">Bailamos</a>
+  <a href="#reviews" onclick="toggleMenu()">Отзывы</a>
+  <a href="#contacts" onclick="toggleMenu()">Записаться</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="sparks" id="sparks"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Танцевальная студия · Подмосковье</div>
+    <h1 class="hero-title">Зажги своё<br><em>Fuego</em></h1>
+    <p class="hero-sub">Бачата, кизомба, цигун — найди свой ритм в тёплой, семейной атмосфере нашей студии и почувствуй, как танец меняет жизнь</p>
+    <div class="hero-btns">
+      <a href="#contacts" class="btn-primary">Записаться на пробное</a>
+      <a href="#directions" class="btn-outline">Наши направления</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Листай вниз
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-card">
+        <div class="about-card-num">5+</div>
+        <p>лет мы создаём тёплое место,<br>где каждый находит свой танец</p>
+        <div class="about-cards">
+          <div class="about-mini">
+            <div class="about-mini-num">300+</div>
+            <p>учеников прошли через студию</p>
+          </div>
+          <div class="about-mini">
+            <div class="about-mini-num">12</div>
+            <p>групп разных уровней</p>
+          </div>
+          <div class="about-mini">
+            <div class="about-mini-num">4</div>
+            <p>опытных преподавателя</p>
+          </div>
+          <div class="about-mini">
+            <div class="about-mini-num">2x</div>
+            <p>вечеринки Bailamos в месяц</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-text reveal">
+      <span class="section-label">О нас</span>
+      <h2 class="section-title">Место, где рождается <span>страсть к танцу</span></h2>
+      <div class="divider"></div>
+
+      <p>FUEGO — это не просто танцевальная школа. Это живое сообщество людей, которые однажды решили впустить музыку и движение в свою жизнь. Мы в Подмосковье с 2019 года, и за это время создали по-настоящему тёплую, домашнюю атмосферу.</p>
+      <p>Наши преподаватели — практикующие танцоры с многолетним опытом, которые обучались в России и за рубежом. Они не просто ставят движения, а помогают каждому ученику раскрыться, обрести уверенность и полюбить танец.</p>
+      <p>Мы принимаем всех — и тех, кто никогда не танцевал, и тех, кто хочет выйти на новый уровень. У нас нет строгих требований: только желание двигаться и хорошее настроение.</p>
+
+      <div class="teacher-tags">
+        <span class="tag">🌿 Уютная атмосфера</span>
+        <span class="tag">👥 Маленькие группы</span>
+        <span class="tag">🎵 Живая музыка</span>
+        <span class="tag">🏆 Опытные педагоги</span>
+        <span class="tag">🆓 Пробный урок</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIRECTIONS ── -->
+<section id="directions">
+  <div class="directions-header reveal">
+    <span class="section-label">Что мы танцуем</span>
+    <h2 class="section-title" style="color:var(--warm-white)">Найди <span style="color:var(--fire-bright);font-style:italic;">своё</span> направление</h2>
+    <div class="divider"></div>
+    <p>От чувственной бачаты до медитативного цигун — у нас каждый найдёт то, что отзывается в сердце</p>
+  </div>
+
+  <div class="directions-grid">
+    <div class="dir-card reveal">
+      <span class="dir-icon">💃</span>
+      <h3 class="dir-title">Бачата</h3>
+      <p class="dir-desc">Романтичный латиноамериканский танец родом из Доминиканы. Близкая связь с партнёром, чувственные волны тела и искренние эмоции — именно это делает бачату такой особенной.</p>
+      <div class="dir-levels">
+        <span class="level">Начинающие</span>
+        <span class="level">Продолжающие</span>
+        <span class="level">Продвинутые</span>
+      </div>
+    </div>
+
+    <div class="dir-card reveal" style="transition-delay:.1s">
+      <span class="dir-icon">🌙</span>
+      <h3 class="dir-title">Кизомба</h3>
+      <p class="dir-desc">Ангольский танец с бархатным звучанием. Медленный, обволакивающий, глубоко эмоциональный. Кизомба — это разговор тел без слов, танец-объятие.</p>
+      <div class="dir-levels">
+        <span class="level">Для всех</span>
+        <span class="level">Продолжающие</span>
+      </div>
+    </div>
+
+    <div class="dir-card reveal" style="transition-delay:.2s">
+      <span class="dir-icon">☯️</span>
+      <h3 class="dir-title">Цигун</h3>
+      <p class="dir-desc">Древняя китайская практика движения и дыхания. Плавные потоки энергии, внутреннее спокойствие и гармония тела. Идеально для восстановления и баланса.</p>
+      <div class="dir-levels">
+        <span class="level">Все уровни</span>
+        <span class="level">Утренние группы</span>
+      </div>
+    </div>
+
+    <div class="dir-card reveal" style="transition-delay:.3s">
+      <span class="dir-icon">🔥</span>
+      <h3 class="dir-title">Сальса</h3>
+      <p class="dir-desc">Энергичная, зажигательная и весёлая! Кубинские ритмы, яркая хореография и неиссякаемая радость движения. Сальса превращает каждую вечеринку в праздник.</p>
+      <div class="dir-levels">
+        <span class="level">Начинающие</span>
+        <span class="level">Продолжающие</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCHEDULE ── -->
+<section id="schedule">
+  <div class="schedule-intro reveal">
+    <span class="section-label">Занятия</span>
+    <h2 class="section-title">Расписание <span>групп</span></h2>
+    <div class="divider"></div>
+    <p>Группы формируются по уровню подготовки. Первое пробное занятие — бесплатно. Запись по телефону или в мессенджерах.</p>
+  </div>
+
+  <div class="schedule-grid">
+    <div class="sched-card reveal">
+      <div class="sched-header">
+        <span class="sched-icon">💃</span>
+        <div>
+          <div class="sched-title">Бачата</div>
+          <div class="sched-subtitle">Bachata Sensual & Tradicional</div>
+        </div>
+      </div>
+      <div class="sched-body">
+        <div class="sched-row">
+          <span class="sched-day">ПН / СР</span>
+          <span class="sched-time">19:00 — 20:30</span>
+          <span class="sched-badge">Начинающие</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">ВТ / ЧТ</span>
+          <span class="sched-time">20:00 — 21:30</span>
+          <span class="sched-badge">Продолжающие</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">СБ</span>
+          <span class="sched-time">12:00 — 13:30</span>
+          <span class="sched-badge">Продвинутые</span>
+        </div>
+        <p class="note">Пары и одиночники — добро пожаловать</p>
+      </div>
+    </div>
+
+    <div class="sched-card reveal" style="transition-delay:.1s">
+      <div class="sched-header">
+        <span class="sched-icon">🌙</span>
+        <div>
+          <div class="sched-title">Кизомба</div>
+          <div class="sched-subtitle">Kizomba & Urban Kiz</div>
+        </div>
+      </div>
+      <div class="sched-body">
+        <div class="sched-row">
+          <span class="sched-day">ПН / ЧТ</span>
+          <span class="sched-time">20:30 — 22:00</span>
+          <span class="sched-badge">Начинающие</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">СР</span>
+          <span class="sched-time">19:00 — 20:30</span>
+          <span class="sched-badge">Продолжающие</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">ВС</span>
+          <span class="sched-time">16:00 — 17:30</span>
+          <span class="sched-badge">Все уровни</span>
+        </div>
+        <p class="note">Возможны индивидуальные занятия</p>
+      </div>
+    </div>
+
+    <div class="sched-card reveal" style="transition-delay:.2s">
+      <div class="sched-header">
+        <span class="sched-icon">☯️</span>
+        <div>
+          <div class="sched-title">Цигун</div>
+          <div class="sched-subtitle">Qigong · Практика здоровья</div>
+        </div>
+      </div>
+      <div class="sched-body">
+        <div class="sched-row">
+          <span class="sched-day">ВТ / СБ</span>
+          <span class="sched-time">08:30 — 09:45</span>
+          <span class="sched-badge">Утренняя</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">ЧТ</span>
+          <span class="sched-time">18:30 — 19:45</span>
+          <span class="sched-badge">Вечерняя</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">ВС</span>
+          <span class="sched-time">09:00 — 10:30</span>
+          <span class="sched-badge">Выходного дня</span>
+        </div>
+        <p class="note">Форма свободная, коврик предоставляется</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BAILAMOS ── -->
+<section id="bailamos">
+  <div class="bailamos-inner">
+    <div class="reveal">
+      <span class="section-label">Вечеринки</span>
+      <h2 class="section-title">Bailamos —<br><span>танцуй без остановки</span></h2>
+      <div class="divider"></div>
+      <p>Два раза в месяц мы устраиваем наши легендарные танцевальные вечеринки Bailamos — живая музыка, горящий паркет и море хорошего настроения. Это место, где студийные навыки встречаются с настоящей танцевальной свободой.</p>
+      <p>На вечеринках звучат бачата, кизомба, сальса и зук. Опыт не обязателен — главное желание двигаться и улыбаться!</p>
+
+      <ul class="bailamos-features">
+        <li>Живые DJ-сеты и специальные гости</li>
+        <li>Открыто для всех — студенты и гости</li>
+        <li>Мастер-классы перед вечеринкой</li>
+        <li>Уютная атмосфера без дресс-кода</li>
+        <li>2 раза в месяц — следите за анонсами</li>
+      </ul>
+
+      <a href="#contacts" class="btn-primary">Узнать дату следующей</a>
+    </div>
+
+    <div class="bailamos-visual reveal">
+      <div class="bailamos-tile">
+        <span class="bailamos-tile-icon">🎶</span>
+        <h4>Живая музыка</h4>
+        <p>Лучшие треки бачаты, кизомбы и сальсы в непрерывном миксе</p>
+      </div>
+      <div class="bailamos-tile">
+        <span class="bailamos-tile-icon">🕺</span>
+        <h4>Social dance</h4>
+        <p>Танцуй с новыми людьми и друзьями</p>
+      </div>
+      <div class="bailamos-tile">
+        <span class="bailamos-tile-icon">✨</span>
+        <h4>Мастер-класс</h4>
+        <p>Короткий урок перед вечеринкой</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REVIEWS ── -->
+<section id="reviews">
+  <div class="reviews-header reveal">
+    <div>
+      <span class="section-label">Отзывы</span>
+      <h2 class="section-title">Что говорят <span>наши ученики</span></h2>
+      <div class="divider"></div>
+    </div>
+  </div>
+
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-quote">"</div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Пришла год назад абсолютным новичком — боялась, что не получится. Сейчас хожу на бачату три раза в неделю и езжу на вечеринки Bailamos! Преподаватели невероятно терпеливые и внимательные. Студия стала моим вторым домом.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">А</div>
+        <div>
+          <div class="reviewer-name">Анастасия К.</div>
+          <div class="reviewer-role">Ученица по бачате · 1 год</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card reveal" style="transition-delay:.1s">
+      <div class="review-quote">"</div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Цигун по утрам с FUEGO — лучшее, что я сделал для своего здоровья. Спина перестала болеть, появился заряд на весь день. Атмосфера спокойная, преподаватель объясняет каждое движение. Рекомендую всем, кто ищет баланс.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">М</div>
+        <div>
+          <div class="reviewer-name">Михаил Т.</div>
+          <div class="reviewer-role">Ученик по цигун · 8 месяцев</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card reveal" style="transition-delay:.2s">
+      <div class="review-quote">"</div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Кизомба в FUEGO — это особая история. Танец потрясающий, но главное — люди вокруг. Здесь всегда рады новичкам, никто не смотрит свысока. Вечеринки Bailamos просто огонь, приходим всей компанией каждый раз!</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">Е</div>
+        <div>
+          <div class="reviewer-name">Елена и Дмитрий</div>
+          <div class="reviewer-role">Пара · Кизомба · 6 месяцев</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACTS ── -->
+<section id="contacts">
+  <div class="contacts-grid">
+    <div class="reveal">
+      <span class="section-label">Контакты</span>
+      <h2 class="section-title">Приходи,<br>мы ждём тебя!</h2>
+      <div class="divider" style="background:linear-gradient(90deg,var(--gold),var(--fire-mid));"></div>
+
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-text">
+            <h4>Адрес</h4>
+            <p>Московская область, г. Красногорск<br>ул. Ленина, 15, 2-й этаж</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📞</div>
+          <div class="contact-item-text">
+            <h4>Телефон</h4>
+            <a href="tel:+79161234567">+7 (916) 123-45-67</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🕐</div>
+          <div class="contact-item-text">
+            <h4>Часы работы</h4>
+            <p>Пн–Пт: 08:00 — 22:00<br>Сб–Вс: 09:00 — 21:00</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">✉️</div>
+          <div class="contact-item-text">
+            <h4>Email</h4>
+            <a href="mailto:info@fuego-dance.ru">info@fuego-dance.ru</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="messengers">
+        <a href="#" class="messenger-btn msg-whatsapp">
+          <span>💬</span> WhatsApp
+        </a>
+        <a href="#" class="messenger-btn msg-telegram">
+          <span>✈️</span> Telegram
+        </a>
+        <a href="#" class="messenger-btn msg-instagram">
+          <span>📸</span> Instagram
+        </a>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="map-wrapper">
+        <div class="map-placeholder">
+          <span class="map-pin">📍</span>
+          <h4>FUEGO Студия танца</h4>
+          <p>г. Красногорск, ул. Ленина, 15</p>
+          <p style="margin-top:.2rem; font-size:.75rem; color:rgba(255,248,240,.35);">Московская область, 2-й этаж</p>
+          <a href="https://maps.google.com" target="_blank" class="map-link">Открыть в Google Maps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">FUE<span>G</span>O · Студия танца</div>
+  <p>© 2024 FUEGO. Все права защищены.</p>
+  <p style="font-size:.72rem; color:rgba(255,248,240,.2);">Сделано с ❤️ и огнём</p>
+</footer>
+
+<script>
+  // ── Navbar shadow on scroll ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ── Mobile menu ──
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // ── Scroll reveal ──
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => io.observe(r));
+
+  // ── Hero sparks ──
+  const sparksContainer = document.getElementById('sparks');
+  function createSpark() {
+    const s = document.createElement('div');
+    s.className = 'spark';
+    const size = Math.random() * 5 + 2;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      bottom:${Math.random()*50}%;
+      animation-duration:${Math.random()*4+3}s;
+      animation-delay:${Math.random()*4}s;
+    `;
+    sparksContainer.appendChild(s);
+    setTimeout(() => s.remove(), 8000);
+  }
+  setInterval(createSpark, 400);
+  for (let i = 0; i < 15; i++) createSpark();
+</script>
+</body>
+</html>
