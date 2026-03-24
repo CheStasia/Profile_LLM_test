@@ -93,10 +93,25 @@
         radial-gradient(ellipse 70% 60% at 50% 60%, rgba(192,57,43,.28) 0%, transparent 70%),
         radial-gradient(ellipse 40% 30% at 80% 80%, rgba(230,126,34,.15) 0%, transparent 60%),
         radial-gradient(ellipse 50% 40% at 20% 20%, rgba(122,18,18,.2) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    .hero-image {
+      position: absolute; inset: 0;
+      background: url('0_3_bloom_medium_2x.png') center/cover no-repeat;
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .hero-image::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(10,10,10,.72);
+      pointer-events: none;
     }
 
     /* animated particles */
-    .sparks { position: absolute; inset: 0; pointer-events: none; }
+    .sparks { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
     .spark {
       position: absolute; border-radius: 50%;
       background: var(--gold);
@@ -111,7 +126,7 @@
       100% { opacity: 0; transform: translateY(-120px) scale(.3); }
     }
 
-    .hero-content { position: relative; z-index: 2; max-width: 820px; }
+    .hero-content { position: relative; z-index: 4; max-width: 820px; }
 
     .hero-badge {
       display: inline-block;
@@ -121,6 +136,7 @@
       text-transform: uppercase;
       padding: .35rem 1.1rem; border-radius: 40px; margin-bottom: 1.8rem;
       animation: fade-up .8s ease both;
+      box-shadow: 0 4px 18px rgba(192,57,43,.35), 0 0 12px rgba(212,160,23,.25);
     }
 
     .hero-title {
@@ -154,12 +170,43 @@
       text-transform: uppercase; text-decoration: none;
       border: none; cursor: pointer;
       box-shadow: 0 8px 30px rgba(192,57,43,.45);
-      transition: transform .2s, box-shadow .2s, background .2s;
+      transition: transform .2s, box-shadow .2s, background .2s, filter .2s;
+      position: relative;
+      overflow: hidden;
     }
     .btn-primary:hover {
       background: var(--fire-bright);
       transform: translateY(-3px);
       box-shadow: 0 14px 40px rgba(231,76,60,.5);
+    }
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.96);
+      box-shadow: 0 6px 18px rgba(192,57,43,.45);
+      filter: brightness(1.05);
+    }
+
+    .btn-outline:active,
+    .nav-cta:active,
+    .messenger-btn:active {
+      transform: translateY(1px) scale(0.96);
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      filter: brightness(1.05);
+    }
+
+    .btn-ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      background: rgba(255,255,255,.45);
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(8);
+        opacity: 0;
+      }
     }
 
     .btn-outline {
@@ -266,7 +313,7 @@
     }
     .about-card p { font-size: .88rem; color: rgba(255,248,240,.65); line-height: 1.5; margin-top: .3rem; }
 
-    .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .about-mini {
       background: rgba(192,57,43,.12);
       border: 1px solid rgba(192,57,43,.2);
@@ -633,10 +680,11 @@
 <!-- ── HERO ── -->
 <section id="hero">
   <div class="hero-bg"></div>
+  <div class="hero-image"></div>
   <div class="sparks" id="sparks"></div>
 
   <div class="hero-content">
-    <div class="hero-badge">Танцевальная студия · Подмосковье</div>
+    <div class="hero-badge">Танцевальная студия · Красногорск</div>
     <h1 class="hero-title">Зажги своё<br><em>Fuego</em></h1>
     <p class="hero-sub">Бачата, кизомба, цигун — найди свой ритм в тёплой, семейной атмосфере нашей студии и почувствуй, как танец меняет жизнь</p>
     <div class="hero-btns">
@@ -656,8 +704,6 @@
   <div class="about-grid">
     <div class="about-visual reveal">
       <div class="about-card">
-        <div class="about-card-num">5+</div>
-        <p>лет мы создаём тёплое место,<br>где каждый находит свой танец</p>
         <div class="about-cards">
           <div class="about-mini">
             <div class="about-mini-num">300+</div>
@@ -1025,6 +1071,25 @@
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
   }
+
+  function createRipple(event) {
+    const button = event.currentTarget;
+    const ripple = document.createElement('span');
+    ripple.className = 'btn-ripple';
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x - size / 2 + 'px';
+    ripple.style.top = y - size / 2 + 'px';
+    button.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+
+  document.querySelectorAll('.btn-primary, .btn-outline, .nav-cta, .messenger-btn').forEach(btn => {
+    btn.addEventListener('click', createRipple);
+  });
 
   // ── Scroll reveal ──
   const reveals = document.querySelectorAll('.reveal');
